@@ -13,6 +13,12 @@ logging.basicConfig(
     level=logging.INFO)
 
 artifactory_url = 'https://ci-artifactory.corda.r3cev.com/artifactory/corda-releases/net/corda/corda-rpc/{version}/corda-rpc-{version}.jar'
+deps = {
+    'kotlin-stdlib-1.3.71.jar' : 'https://repo1.maven.org/maven2/org/jetbrains/kotlin/kotlin-stdlib/1.3.71/kotlin-stdlib-1.3.71.jar',
+    'corda-core-{version}.jar' : 'https://ci-artifactory.corda.r3cev.com/artifactory/corda-releases/net/corda/corda-core/{version}/corda-core-{version}.jar',
+    'corda-rpc-{version}.jar': 'https://ci-artifactory.corda.r3cev.com/artifactory/corda-releases/net/corda/corda-rpc/{version}/corda-rpc-{version}.jar',
+    'guava-28.2-jre.jar': 'https://repo1.maven.org/maven2/com/google/guava/guava/28.2-jre/guava-28.2-jre.jar'
+}
 
 def main():
     options = optparse.OptionParser(usage='%prog [options]', description='injector')
@@ -31,7 +37,9 @@ def main():
     opts, args = options.parse_args()
 
     params = {
-        'version': opts.version
+        'version': opts.version,
+        'host': opts.hostname,
+        'port': opts.port
     }
 
     jlibs = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'jlibs')
@@ -39,14 +47,29 @@ def main():
         logging.info("Creating directory for rpc libs")
         os.mkdir(jlibs)
 
-    rpc_lib = os.path.join(jlibs, 'corda-rpc-{version}.jar'.format(**params))
-    if not os.path.exists(rpc_lib):
-        logging.info("Download {version} rpc client".format(**params))
-        with open(rpc_lib, 'wb') as rpc_lib_file:
-            rpc_lib_file.write(requests.get(artifactory_url.format(**params)).content)
-
     # add library check
-    sys.path.append(rpc_lib)    
+    for jar_name in deps:
+        full_jar_name = jar_name.format(**params)
+        jlib = os.path.join(jlibs, full_jar_name)
+        if not os.path.exists(jlib):
+            url = deps[jar_name].format(**params)
+            logging.info("Download {0} lib".format(full_jar_name))
+            with open(jlib, 'wb') as lib_file:
+                lib_file.write(requests.get(url).content)
+        sys.path.append(jlib)
+    from com.google.common.net import HostAndPort
+    from net.corda.client.rpc import CordaRPCClient
+    client = CordaRPCClient(HostAndPort.fromString('{host}:{port}'.format(**params)), None, None)
+    client.start("user1", "test")
+    proxy = client.proxy(None,0)
+    print "Proxy is",proxy
+    txs = proxy.verifiedTransactions().first
+
+    print "There are %s 'unspent' IOUs on 'NodeA'" % (len(txs))
+
+    if len(txs):
+        for txn in txs:
+            print(txn.tx.outputs[0].data.iou)
 
 if __name__ == '__main__':
     sys.exit(main())
