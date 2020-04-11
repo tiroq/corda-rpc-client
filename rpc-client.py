@@ -21,12 +21,12 @@ deps = {
 }
 
 def main():
-    options = optparse.OptionParser(usage='%prog [options]', description='injector')
+    options = optparse.OptionParser(usage='%prog [options]', description='corda rpc injector')
     options.add_option('--hostname', type='str', default='127.0.0.1', help='hostname')
     options.add_option('--port', type='int', default=6789, help='port')
     options.add_option('--username', type='str', default='corda', help='username')
     options.add_option('--password', type='str', default='password', help='password')
-    options.add_option('--version', type='str', default='4.4', help='repeat_count')
+    options.add_option('--version', type='str', default='4.4', help='corda version')
     # options.add_option('--action', type='str', default='cash_issue_flow', help='action')
     # options.add_option('--amount', type='float', default=55.00, help='amount')
     # options.add_option('--currency', type='str', default='USD', help='currency')
