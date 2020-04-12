@@ -39,7 +39,9 @@ def main():
     params = {
         'version': opts.version,
         'host': opts.hostname,
-        'port': opts.port
+        'port': opts.port,
+        'username': opts.username,
+        'password': opts.password
     }
 
     jlibs = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'jlibs')
@@ -60,7 +62,7 @@ def main():
     from com.google.common.net import HostAndPort
     from net.corda.client.rpc import CordaRPCClient
     client = CordaRPCClient(HostAndPort.fromString('{host}:{port}'.format(**params)), None, None)
-    client.start("user1", "test")
+    client.start(opts.username, opts.password)
     proxy = client.proxy(None,0)
     print "Proxy is",proxy
     txs = proxy.verifiedTransactions().first
