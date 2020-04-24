@@ -23,6 +23,8 @@ deps = {
     'corda-core-{version}.jar' : 'https://ci-artifactory.corda.r3cev.com/artifactory/corda-releases/net/corda/corda-core/{version}/corda-core-{version}.jar',
     'corda-rpc-{version}.jar': 'https://ci-artifactory.corda.r3cev.com/artifactory/corda-releases/net/corda/corda-rpc/{version}/corda-rpc-{version}.jar',
     'corda-{version}.jar': 'https://ci-artifactory.corda.r3cev.com/artifactory/corda-releases/net/corda/corda/{version}/corda-{version}.jar',
+    'corda-finance-contracts-{version}.jar': 'https://ci-artifactory.corda.r3cev.com/artifactory/corda-releases/net/corda/corda-finance-contracts/{version}/corda-finance-contracts-{version}.jar',
+    'corda-finance-workflows-{version}.jar': 'https://ci-artifactory.corda.r3cev.com/artifactory/corda-releases/net/corda/corda-finance-workflows/{version}/corda-finance-workflows-{version}.jar',
     'guava-28.2-jre.jar': 'https://repo1.maven.org/maven2/com/google/guava/guava/28.2-jre/guava-28.2-jre.jar',
     'slf4j-api-2.0.0-alpha1.jar': 'https://repo1.maven.org/maven2/org/slf4j/slf4j-api/2.0.0-alpha1/slf4j-api-2.0.0-alpha1.jar',
     'caffeine-2.8.1.jar': 'https://repo1.maven.org/maven2/com/github/ben-manes/caffeine/caffeine/2.8.1/caffeine-2.8.1.jar',
@@ -90,6 +92,15 @@ def main():
     from net.corda.client.rpc import CordaRPCClient
     from net.corda.core.utilities import NetworkHostAndPort
 
+    from net.corda.finance.contracts.asset import Cash
+    from net.corda.core.node.services.vault import QueryCriteria
+    from net.corda.core.node.services.vault import PageSpecification
+    from net.corda.core.node.services.vault import Sort
+
+    import net.corda.finance.flows.CashIssueFlow
+    import net.corda.finance.flows.CashPaymentFlow
+
+
     rpcAddress = NetworkHostAndPort(opts.hostname, opts.port)
     logging.info("Connecting to {0}".format(rpcAddress))
     # client = CordaRPCClient(HostAndPort.fromString('{host}:{port}'.format(**params)), None, None)
@@ -98,8 +109,12 @@ def main():
     proxy = client.start(opts.username, opts.password).proxy
     # logging.info("Getting proxy object")
     # proxy = client.proxy
-    txs = proxy.verifiedTransactions().first
-
+    print dir(proxy)
+    # txs = proxy.verifiedTransactions().first
+    vault = proxy.vaultQueryBy(QueryCriteria.VaultQueryCriteria(), PageSpecification(), Sort([]), Cash.State).states
+    print vault
+    print proxy.stateMachinesSnapshot()
+    print proxy.networkMapSnapshot()
     print "There are %s 'unspent' IOUs on 'NodeA'" % (len(txs))
 
     if len(txs):
