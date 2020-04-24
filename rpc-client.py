@@ -15,9 +15,30 @@ logging.basicConfig(
 artifactory_url = 'https://ci-artifactory.corda.r3cev.com/artifactory/corda-releases/net/corda/corda-rpc/{version}/corda-rpc-{version}.jar'
 deps = {
     'kotlin-stdlib-1.3.71.jar' : 'https://repo1.maven.org/maven2/org/jetbrains/kotlin/kotlin-stdlib/1.3.71/kotlin-stdlib-1.3.71.jar',
+    'corda-serialization-{version}.jar': 'https://ci-artifactory.corda.r3cev.com/artifactory/corda-releases/net/corda/corda-serialization/{version}/corda-serialization-{version}.jar',
+    'corda-node-api-{version}.jar': 'https://ci-artifactory.corda.r3cev.com/artifactory/corda-releases/net/corda/corda-node-api/{version}/corda-node-api-{version}.jar',
     'corda-core-{version}.jar' : 'https://ci-artifactory.corda.r3cev.com/artifactory/corda-releases/net/corda/corda-core/{version}/corda-core-{version}.jar',
     'corda-rpc-{version}.jar': 'https://ci-artifactory.corda.r3cev.com/artifactory/corda-releases/net/corda/corda-rpc/{version}/corda-rpc-{version}.jar',
-    'guava-28.2-jre.jar': 'https://repo1.maven.org/maven2/com/google/guava/guava/28.2-jre/guava-28.2-jre.jar'
+    'corda-{version}.jar': 'https://ci-artifactory.corda.r3cev.com/artifactory/corda-releases/net/corda/corda/{version}/corda-{version}.jar',
+    'guava-28.2-jre.jar': 'https://repo1.maven.org/maven2/com/google/guava/guava/28.2-jre/guava-28.2-jre.jar',
+    'slf4j-api-2.0.0-alpha1.jar': 'https://repo1.maven.org/maven2/org/slf4j/slf4j-api/2.0.0-alpha1/slf4j-api-2.0.0-alpha1.jar',
+    'caffeine-2.8.1.jar': 'https://repo1.maven.org/maven2/com/github/ben-manes/caffeine/caffeine/2.8.1/caffeine-2.8.1.jar',
+    'classgraph-4.8.69.jar': 'https://repo1.maven.org/maven2/io/github/classgraph/classgraph/4.8.69/classgraph-4.8.69.jar',
+    'proton-j-0.7.jar': 'https://repo1.maven.org/maven2/org/apache/qpid/proton-j/0.7/proton-j-0.7.jar',
+    'artemis-core-client-2.11.0.jar': 'https://repo1.maven.org/maven2/org/apache/activemq/artemis-core-client/2.11.0/artemis-core-client-2.11.0.jar',
+    'javax.json-api-1.1.4.jar': 'https://repo1.maven.org/maven2/javax/json/javax.json-api/1.1.4/javax.json-api-1.1.4.jar',
+    'artemis-commons-2.11.0.jar': 'https://repo1.maven.org/maven2/org/apache/activemq/artemis-commons/2.11.0/artemis-commons-2.11.0.jar',
+    'jboss-logging-3.4.1.Final.jar': 'https://repo1.maven.org/maven2/org/jboss/logging/jboss-logging/3.4.1.Final/jboss-logging-3.4.1.Final.jar',
+    'commons-lang3-3.10.jar': 'https://repo1.maven.org/maven2/org/apache/commons/commons-lang3/3.10/commons-lang3-3.10.jar',
+    'eddsa-0.3.0.jar': 'https://repo1.maven.org/maven2/net/i2p/crypto/eddsa/0.3.0/eddsa-0.3.0.jar',
+    'bcprov-jdk15on-1.65.jar': 'https://repo1.maven.org/maven2/org/bouncycastle/bcprov-jdk15on/1.65/bcprov-jdk15on-1.65.jar',
+    # 'org.apache.servicemix.bundles.bcprov-jdk16-1.46_3.jar': 'https://repo1.maven.org/maven2/org/apache/servicemix/bundles/org.apache.servicemix.bundles.bcprov-jdk16/1.46_3/org.apache.servicemix.bundles.bcprov-jdk16-1.46_3.jar',
+    'commons-beanutils-1.9.4.jar': 'https://repo1.maven.org/maven2/commons-beanutils/commons-beanutils/1.9.4/commons-beanutils-1.9.4.jar',
+    'commons-logging-1.2.jar': 'https://repo1.maven.org/maven2/commons-logging/commons-logging/1.2/commons-logging-1.2.jar',
+    'kotlin-reflect-1.3.72.jar': 'https://repo1.maven.org/maven2/org/jetbrains/kotlin/kotlin-reflect/1.3.72/kotlin-reflect-1.3.72.jar',
+    # 'concrete-rx-observable-0.4.1.jar': 'https://repo1.maven.org/maven2/org/coodex/concrete-rx-observable/0.4.1/concrete-rx-observable-0.4.1.jar'
+    'rxjava-1.0.2.jar': 'https://repo1.maven.org/maven2/io/reactivex/rxjava/1.0.2/rxjava-1.0.2.jar',
+    'netty-all-5.0.0.Alpha2.jar': 'https://repo1.maven.org/maven2/io/netty/netty-all/5.0.0.Alpha2/netty-all-5.0.0.Alpha2.jar'
 }
 
 def main():
@@ -61,7 +82,13 @@ def main():
         sys.path.append(jlib)
     from com.google.common.net import HostAndPort
     from net.corda.client.rpc import CordaRPCClient
-    client = CordaRPCClient(HostAndPort.fromString('{host}:{port}'.format(**params)), None, None)
+    from net.corda.core.utilities import NetworkHostAndPort
+
+    rpcAddress = NetworkHostAndPort(opts.hostname, opts.port)
+    logging.info("Connecting to {0}".format(rpcAddress))
+    # client = CordaRPCClient(HostAndPort.fromString('{host}:{port}'.format(**params)), None, None)
+    client = CordaRPCClient(rpcAddress)
+    logging.info("RPC client created. Starting Auth process")
     client.start(opts.username, opts.password)
     proxy = client.proxy(None,0)
     print "Proxy is",proxy
