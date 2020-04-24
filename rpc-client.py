@@ -38,7 +38,8 @@ deps = {
     'kotlin-reflect-1.3.72.jar': 'https://repo1.maven.org/maven2/org/jetbrains/kotlin/kotlin-reflect/1.3.72/kotlin-reflect-1.3.72.jar',
     # 'concrete-rx-observable-0.4.1.jar': 'https://repo1.maven.org/maven2/org/coodex/concrete-rx-observable/0.4.1/concrete-rx-observable-0.4.1.jar'
     'rxjava-1.0.2.jar': 'https://repo1.maven.org/maven2/io/reactivex/rxjava/1.0.2/rxjava-1.0.2.jar',
-    'netty-all-5.0.0.Alpha2.jar': 'https://repo1.maven.org/maven2/io/netty/netty-all/5.0.0.Alpha2/netty-all-5.0.0.Alpha2.jar'
+    # 'netty-all-5.0.0.Alpha2.jar': 'https://repo1.maven.org/maven2/io/netty/netty-all/5.0.0.Alpha2/netty-all-5.0.0.Alpha2.jar',
+    'netty-all-4.1.49.Final.jar': 'https://repo1.maven.org/maven2/io/netty/netty-all/4.1.49.Final/netty-all-4.1.49.Final.jar'
 }
 
 def main():
