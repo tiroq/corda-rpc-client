@@ -7,10 +7,13 @@ import logging
 import requests
 import optparse
 
+# Setup logging format for the file
 logging.basicConfig(
     format='%(asctime)s | %(levelname)s | %(message)s',
     filename=os.path.join(os.path.dirname(os.path.abspath(__file__)), 'rpc-client.log'),
     level=logging.INFO)
+# Adding STDERR output
+logging.getLogger().addHandler(logging.StreamHandler())
 
 artifactory_url = 'https://ci-artifactory.corda.r3cev.com/artifactory/corda-releases/net/corda/corda-rpc/{version}/corda-rpc-{version}.jar'
 deps = {
@@ -93,8 +96,8 @@ def main():
     client = CordaRPCClient(rpcAddress)
     logging.info("RPC client created. Starting Auth process")
     client.start(opts.username, opts.password)
-    proxy = client.proxy(None,0)
-    print "Proxy is",proxy
+    logging.info("Getting proxy object")
+    proxy = client.proxy
     txs = proxy.verifiedTransactions().first
 
     print "There are %s 'unspent' IOUs on 'NodeA'" % (len(txs))
