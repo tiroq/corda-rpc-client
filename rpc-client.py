@@ -40,7 +40,8 @@ deps = {
     # 'concrete-rx-observable-0.4.1.jar': 'https://repo1.maven.org/maven2/org/coodex/concrete-rx-observable/0.4.1/concrete-rx-observable-0.4.1.jar'
     'rxjava-1.0.2.jar': 'https://repo1.maven.org/maven2/io/reactivex/rxjava/1.0.2/rxjava-1.0.2.jar',
     # 'netty-all-5.0.0.Alpha2.jar': 'https://repo1.maven.org/maven2/io/netty/netty-all/5.0.0.Alpha2/netty-all-5.0.0.Alpha2.jar',
-    'netty-all-4.1.49.Final.jar': 'https://repo1.maven.org/maven2/io/netty/netty-all/4.1.49.Final/netty-all-4.1.49.Final.jar'
+    'netty-all-4.1.49.Final.jar': 'https://repo1.maven.org/maven2/io/netty/netty-all/4.1.49.Final/netty-all-4.1.49.Final.jar',
+    'failureaccess-1.0.jar': 'https://repo1.maven.org/maven2/com/google/guava/failureaccess/1.0/failureaccess-1.0.jar'
 }
 
 def main():
