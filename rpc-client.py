@@ -95,9 +95,9 @@ def main():
     # client = CordaRPCClient(HostAndPort.fromString('{host}:{port}'.format(**params)), None, None)
     client = CordaRPCClient(rpcAddress)
     logging.info("RPC client created. Starting Auth process")
-    client.start(opts.username, opts.password)
-    logging.info("Getting proxy object")
-    proxy = client.proxy
+    proxy = client.start(opts.username, opts.password).proxy
+    # logging.info("Getting proxy object")
+    # proxy = client.proxy
     txs = proxy.verifiedTransactions().first
 
     print "There are %s 'unspent' IOUs on 'NodeA'" % (len(txs))
