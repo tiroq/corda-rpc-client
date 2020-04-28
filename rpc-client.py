@@ -72,8 +72,10 @@ def main():
             for _class in classes:
                 class_name = _class.split('.')[-1]
                 logging.info('Loading {0} class.'.format(_class))
-                globals()[class_name] = __import__(_class.rsplit('.', 1)[0], {}, {}, [class_name], 0)
+                globals()[class_name] = getattr(__import__(_class.rsplit('.', 1)[0], {}, {}, fromlist=[class_name]), class_name)
 
+    logging.info('Creating rpcAddress')
+    print NetworkHostAndPort.__name__, dir(NetworkHostAndPort)
     rpcAddress = NetworkHostAndPort(opts.hostname, opts.port)
     logging.info("Connecting to {0}".format(rpcAddress))
     client = CordaRPCClient(rpcAddress)
