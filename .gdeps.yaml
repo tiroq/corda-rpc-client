@@ -1,0 +1,4 @@
+libs:
+  - name: foo
+    link: bar
+    class: .test.Class
