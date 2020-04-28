@@ -1,7 +1,4 @@
 libs:
-  # - name: foo
-  #   link: bar
-  #   class: .test.Class
   - name: kotlin-stdlib-1.3.71.jar
     link: https://repo1.maven.org/maven2/org/jetbrains/kotlin/kotlin-stdlib/1.3.71/kotlin-stdlib-1.3.71.jar
   - name: corda-serialization-{version}.jar
@@ -10,17 +7,27 @@ libs:
     link: https://ci-artifactory.corda.r3cev.com/artifactory/corda-releases/net/corda/corda-node-api/{version}/corda-node-api-{version}.jar
   - name: corda-core-{version}.jar
     link: https://ci-artifactory.corda.r3cev.com/artifactory/corda-releases/net/corda/corda-core/{version}/corda-core-{version}.jar
+    class:
+      - net.corda.core.utilities.NetworkHostAndPort
+      - net.corda.core.node.services.vault.QueryCriteria
+      - net.corda.core.node.services.vault.PageSpecification
+      - net.corda.core.node.services.vault.Sort
   - name: corda-rpc-{version}.jar
     link: https://ci-artifactory.corda.r3cev.com/artifactory/corda-releases/net/corda/corda-rpc/{version}/corda-rpc-{version}.jar
+    class: net.corda.client.rpc.CordaRPCClient
   - name: corda-{version}.jar
     link: https://ci-artifactory.corda.r3cev.com/artifactory/corda-releases/net/corda/corda/{version}/corda-{version}.jar
   - name: corda-finance-contracts-{version}.jar
     link: https://ci-artifactory.corda.r3cev.com/artifactory/corda-releases/net/corda/corda-finance-contracts/{version}/corda-finance-contracts-{version}.jar
+    class: net.corda.finance.contracts.asset.Cash
   - name: corda-finance-workflows-{version}.jar
     link: https://ci-artifactory.corda.r3cev.com/artifactory/corda-releases/net/corda/corda-finance-workflows/{version}/corda-finance-workflows-{version}.jar
+    class:
+      - net.corda.finance.flows.CashIssueFlow
+      - net.corda.finance.flows.CashPaymentFlow
   - name: guava-28.2-jre.jar
     link: https://repo1.maven.org/maven2/com/google/guava/guava/28.2-jre/guava-28.2-jre.jar
-    class: .com.google.common.net.HostAndPort
+    class: com.google.common.net.HostAndPort
   - name: slf4j-api-2.0.0-alpha1.jar
     link: https://repo1.maven.org/maven2/org/slf4j/slf4j-api/2.0.0-alpha1/slf4j-api-2.0.0-alpha1.jar
   - name: caffeine-2.8.1.jar
