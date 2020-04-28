@@ -1,4 +1,57 @@
 libs:
-  - name: foo
-    link: bar
-    class: .test.Class
+  # - name: foo
+  #   link: bar
+  #   class: .test.Class
+  - name: kotlin-stdlib-1.3.71.jar
+    link: https://repo1.maven.org/maven2/org/jetbrains/kotlin/kotlin-stdlib/1.3.71/kotlin-stdlib-1.3.71.jar
+  - name: corda-serialization-{version}.jar
+    link: https://ci-artifactory.corda.r3cev.com/artifactory/corda-releases/net/corda/corda-serialization/{version}/corda-serialization-{version}.jar
+  - name: corda-node-api-{version}.jar
+    link: https://ci-artifactory.corda.r3cev.com/artifactory/corda-releases/net/corda/corda-node-api/{version}/corda-node-api-{version}.jar
+  - name: corda-core-{version}.jar
+    link: https://ci-artifactory.corda.r3cev.com/artifactory/corda-releases/net/corda/corda-core/{version}/corda-core-{version}.jar
+  - name: corda-rpc-{version}.jar
+    link: https://ci-artifactory.corda.r3cev.com/artifactory/corda-releases/net/corda/corda-rpc/{version}/corda-rpc-{version}.jar
+  - name: corda-{version}.jar
+    link: https://ci-artifactory.corda.r3cev.com/artifactory/corda-releases/net/corda/corda/{version}/corda-{version}.jar
+  - name: corda-finance-contracts-{version}.jar
+    link: https://ci-artifactory.corda.r3cev.com/artifactory/corda-releases/net/corda/corda-finance-contracts/{version}/corda-finance-contracts-{version}.jar
+  - name: corda-finance-workflows-{version}.jar
+    link: https://ci-artifactory.corda.r3cev.com/artifactory/corda-releases/net/corda/corda-finance-workflows/{version}/corda-finance-workflows-{version}.jar
+  - name: guava-28.2-jre.jar
+    link: https://repo1.maven.org/maven2/com/google/guava/guava/28.2-jre/guava-28.2-jre.jar
+    class: .com.google.common.net.HostAndPort
+  - name: slf4j-api-2.0.0-alpha1.jar
+    link: https://repo1.maven.org/maven2/org/slf4j/slf4j-api/2.0.0-alpha1/slf4j-api-2.0.0-alpha1.jar
+  - name: caffeine-2.8.1.jar
+    link: https://repo1.maven.org/maven2/com/github/ben-manes/caffeine/caffeine/2.8.1/caffeine-2.8.1.jar
+  - name: classgraph-4.8.69.jar
+    link: https://repo1.maven.org/maven2/io/github/classgraph/classgraph/4.8.69/classgraph-4.8.69.jar
+  - name: proton-j-0.33.4.jar
+    link: https://repo1.maven.org/maven2/org/apache/qpid/proton-j/0.33.4/proton-j-0.33.4.jar
+  - name: artemis-core-client-2.11.0.jar
+    link: https://repo1.maven.org/maven2/org/apache/activemq/artemis-core-client/2.11.0/artemis-core-client-2.11.0.jar
+  - name: javax.json-api-1.1.4.jar
+    link: https://repo1.maven.org/maven2/javax/json/javax.json-api/1.1.4/javax.json-api-1.1.4.jar
+  - name: artemis-commons-2.11.0.jar
+    link: https://repo1.maven.org/maven2/org/apache/activemq/artemis-commons/2.11.0/artemis-commons-2.11.0.jar
+  - name: jboss-logging-3.4.1.Final.jar
+    link: https://repo1.maven.org/maven2/org/jboss/logging/jboss-logging/3.4.1.Final/jboss-logging-3.4.1.Final.jar
+  - name: commons-lang3-3.10.jar
+    link: https://repo1.maven.org/maven2/org/apache/commons/commons-lang3/3.10/commons-lang3-3.10.jar
+  - name: eddsa-0.3.0.jar
+    link: https://repo1.maven.org/maven2/net/i2p/crypto/eddsa/0.3.0/eddsa-0.3.0.jar
+  - name: bcprov-jdk15on-1.65.jar
+    link: https://repo1.maven.org/maven2/org/bouncycastle/bcprov-jdk15on/1.65/bcprov-jdk15on-1.65.jar
+  - name: commons-beanutils-1.9.4.jar
+    link: https://repo1.maven.org/maven2/commons-beanutils/commons-beanutils/1.9.4/commons-beanutils-1.9.4.jar
+  - name: commons-logging-1.2.jar
+    link: https://repo1.maven.org/maven2/commons-logging/commons-logging/1.2/commons-logging-1.2.jar
+  - name: kotlin-reflect-1.3.72.jar
+    link: https://repo1.maven.org/maven2/org/jetbrains/kotlin/kotlin-reflect/1.3.72/kotlin-reflect-1.3.72.jar
+  - name: rxjava-1.0.2.jar
+    link: https://repo1.maven.org/maven2/io/reactivex/rxjava/1.0.2/rxjava-1.0.2.jar
+  - name: netty-all-4.1.49.Final.jar
+    link: https://repo1.maven.org/maven2/io/netty/netty-all/4.1.49.Final/netty-all-4.1.49.Final.jar
+  - name: failureaccess-1.0.jar
+    link: https://repo1.maven.org/maven2/com/google/guava/failureaccess/1.0/failureaccess-1.0.jar
