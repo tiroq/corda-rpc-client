@@ -30,6 +30,7 @@ def main():
     options.add_option('--version', type='str', default='4.4', help='corda version')
     options.add_option('--dependencies_config', type='str', default='.gdeps.yaml', help='file with all required dependencies')
     # options.add_option('--amount', type='float', default=55.00, help='amount')
+    options.add_option('--iterations', type='int', default=1, help='cash issue iterations')
 
     opts, args = options.parse_args()
 
@@ -72,26 +73,31 @@ def main():
             for _class in classes:
                 class_name = _class.split('.')[-1]
                 logging.info('Loading {0} class.'.format(_class))
-                globals()[class_name] = getattr(__import__(_class.rsplit('.', 1)[0], {}, {}, fromlist=[class_name]), class_name)
+                globals()[class_name] = getattr(__import__(_class.rsplit('.', 1)[0], fromlist=[class_name]), class_name)
 
     logging.info('Creating rpcAddress')
-    print NetworkHostAndPort.__name__, dir(NetworkHostAndPort)
     rpcAddress = NetworkHostAndPort(opts.hostname, opts.port)
     logging.info("Connecting to {0}".format(rpcAddress))
     client = CordaRPCClient(rpcAddress)
     logging.info("RPC client created. Starting Auth process")
     proxy = client.start(opts.username, opts.password).proxy
-    print dir(proxy)
+    networkParameters = proxy.getNetworkParameters()
+    for i in xrange(opts.iterations):
+        logging.info("Iteration #{0}".format(i))
+        print dir(globals()['CashIssueFlow'])
+        print dir(networkParameters)
+        print dir(networkParameters.notaries[0])
+        print networkParameters.notaries[0].identity
+        print dir(proxy.notaryIdentities)
+        print dir(globals()['CashIssueFlow'](DOLLARS(1), OpaqueBytes.of(0), networkParameters.notaries[0].identity))
+        # proxy.startFlowDynamic(globals()['CashIssueFlow'], [DOLLARS(1), OpaqueBytes.of(0), networkParameters.notaries[0]])
+        proxy.startFlowDynamic(globals()['CashIssueFlow'], [DOLLARS(1), OpaqueBytes.of(0), networkParameters.notaries[0].identity])
+    # print dir(proxy)
     # txs = proxy.verifiedTransactions().first
-    vault = proxy.vaultQueryBy(QueryCriteria.VaultQueryCriteria(), PageSpecification(), Sort([]), Cash.State).states
-    print vault
-    print proxy.stateMachinesSnapshot()
-    print proxy.networkMapSnapshot()
-    print "There are %s 'unspent' IOUs on 'NodeA'" % (len(txs))
+    # vault = proxy.vaultQueryBy(QueryCriteria.VaultQueryCriteria(), PageSpecification(), Sort([]), Cash.State).states
+    # print vault
+    # print proxy.stateMachinesSnapshot()
 
-    if len(txs):
-        for txn in txs:
-            print(txn.tx.outputs[0].data.iou)
 
 if __name__ == '__main__':
     sys.exit(main())
