@@ -14,8 +14,13 @@ libs:
       - net.corda.core.node.services.vault.PageSpecification
       - net.corda.core.node.services.vault.Sort
   - name: corda-rpc-{version}.jar
-    link: https://ci-artifactory.corda.r3cev.com/artifactory/corda-releases/net/corda/corda-rpc/{version}/corda-rpc-{version}.jar
+    link: https://ci-artifactory.corda.r3cev.com/artifactory/corda-enterprise/com/r3/corda/corda-rpc/{version}/corda-rpc-{version}.jar
+    repo_type: ENT
     class: net.corda.client.rpc.CordaRPCClient
+  - name: corda-rpc-ext-{version}.jar
+    link: https://ci-artifactory.corda.r3cev.com/artifactory/corda-enterprise/com/r3/corda/corda-rpc-ext/{version}/corda-rpc-ext-{version}.jar
+    repo_type: ENT
+    class: net.corda.client.rpc.proxy.AuditDataRpcOps
   - name: corda-{version}.jar
     link: https://ci-artifactory.corda.r3cev.com/artifactory/corda-releases/net/corda/corda/{version}/corda-{version}.jar
   - name: guava-28.2-jre.jar
