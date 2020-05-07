@@ -27,6 +27,8 @@ def main():
     options.add_option('--port', type='int', default=6789, help='port')
     options.add_option('--username', type='str', default='corda', help='username')
     options.add_option('--password', type='str', default='password', help='password')
+    options.add_option('--corda-artifactory-username', type='str', default=os.getenv('CORDA_ARTIFACTORY_USERNAME', None), help='username')
+    options.add_option('--corda-artifactory-password', type='str', default=os.getenv('CORDA_ARTIFACTORY_PASSWORD', None), help='password')
     options.add_option('--version', type='str', default='4.4', help='corda version')
     options.add_option('--dependencies_config', type='str', default='.gdeps.yaml', help='file with all required dependencies')
     # options.add_option('--amount', type='float', default=55.00, help='amount')
@@ -59,7 +61,17 @@ def main():
             url = dependency['link'].format(**params)
             logging.info("Download {0} lib".format(full_jar_name))
             with open(jlib, 'wb') as lib_file:
-                lib_file.write(requests.get(url).content)
+                repo_type = dependency.get('repo_type', None)
+                if repo_type == 'ENT':
+                    if opts.corda_artifctory_username is None:
+                        logging.error("Please set CORDA_ARTIFACTORY_USERNAME env variable")
+                        sys.exit(1)
+                    if opts.corda_artifctory_password is None:
+                        logging.error("Please set CORDA_ARTIFACTORY_PASSWORD env variable")
+                        sys.exit(1)
+                    lib_file.write(requests.get(url, auth=(opts.corda_artifctory_username, opts.corda_artifctory_password)).content)
+                else:
+                    lib_file.write(requests.get(url).content)
         else:
             logging.debug('Already downloaded: {0}'.format(full_jar_name))
         sys.path.append(jlib)
@@ -84,14 +96,23 @@ def main():
     networkParameters = proxy.getNetworkParameters()
     for i in xrange(opts.iterations):
         logging.info("Iteration #{0}".format(i))
-        print dir(globals()['CashIssueFlow'])
-        print dir(networkParameters)
-        print dir(networkParameters.notaries[0])
-        print networkParameters.notaries[0].identity
-        print dir(proxy.notaryIdentities)
-        print dir(globals()['CashIssueFlow'](DOLLARS(1), OpaqueBytes.of(0), networkParameters.notaries[0].identity))
+        # print dir(globals()['CashIssueFlow'])
+        # print dir(networkParameters)
+        # print dir(networkParameters.notaries[0])
+        # print networkParameters.notaries[0].identity
+        # print dir(proxy.notaryIdentities)
+        # print dir(globals()['CashIssueFlow'](DOLLARS(1), OpaqueBytes.of(0), networkParameters.notaries[0].identity))
         # proxy.startFlowDynamic(globals()['CashIssueFlow'], [DOLLARS(1), OpaqueBytes.of(0), networkParameters.notaries[0]])
-        proxy.startFlowDynamic(globals()['CashIssueFlow'], [DOLLARS(1), OpaqueBytes.of(0), networkParameters.notaries[0].identity])
+        flowHandle = proxy.startTrackedFlowDynamic(globals()['CashIssueFlow'], [DOLLARS(1), OpaqueBytes.of(0), networkParameters.notaries[0].identity])
+        flowHandle.returnValue.get()
+        # print proxy.startTrackedFlowDynamic(globals()['CashIssueFlow'], [DOLLARS(1), OpaqueBytes.of(0), networkParameters.notaries[0].identity]).progress
+        # print dir(proxy.startTrackedFlowDynamic(globals()['CashIssueFlow'], [DOLLARS(1), OpaqueBytes.of(0), networkParameters.notaries[0].identity]).progress)
+        flowHandle = proxy.startTrackedFlowDynamic(globals()['CashIssueFlow'], [DOLLARS(1), OpaqueBytes.of(0), networkParameters.notaries[0].identity]).progress
+        # flowHandle.subscribe()
+        flowHandle.subscribe().onNext()
+        print dir(flowHandle.subscribe())
+        # print proxy.startTrackedFlowDynamic(globals()['CashIssueFlow'], [DOLLARS(1), OpaqueBytes.of(0), networkParameters.notaries[0].identity]).getProgress()
+        # print dir(proxy.startTrackedFlowDynamic(globals()['CashIssueFlow'], [DOLLARS(1), OpaqueBytes.of(0), networkParameters.notaries[0].identity]))
     # print dir(proxy)
     # txs = proxy.verifiedTransactions().first
     # vault = proxy.vaultQueryBy(QueryCriteria.VaultQueryCriteria(), PageSpecification(), Sort([]), Cash.State).states
